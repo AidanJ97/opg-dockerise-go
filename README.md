@@ -1,42 +1,30 @@
-# Technical challenge
+# Technical challenge - Aidan Johnson
 
-This repository forms the basis of our technical challenge and is used with in our hiring process.
+## My Approach
 
-Our production environments utilise AWS cloud platform with the infrastructure being created and controlled by Hashicorp's Terraform. Our deployment process takes the app code repository, generates a series of docker images which are then placed into AWS Elastic Cluster Service.
+### Initial setup
+- Made a fork of the repo and cloned locally.
+- Installed Golang and Docker. I opted to use my personal machine and not work machine so that these steps would be necessary.
+- Ran the api as is using `go run ./app/main.go` to check everything was working as expected.
 
-## Application
+### Setting up my environment variables   
+- Initially I made an `.env` file to hold my environment variables, however `os package` does not support loading environment variables this way.
+    - Realising this I temporarily set the environment variable `APP_STATUS` using `os.Setenv()` function to test.
+    - I kept my `.env` as I would later use this when setting environment variables in docker.
+- Added `.gitignore` and added `.env` to this.
+    - This isn't necessary but is good practice if we were to be storing secret keys, DB variables, etc.
 
-This repository contains a [Go](https://golang.org/) application (inside the `./app` folder) that acts as an API; it is configured to respond on port `8080` and has two endpoints (`/` and `/status`) that return `json` content.
+### Dockerising
+- As I was setting up on my personal windows machine as opposed to my work mac, it was necessary to enable "Windows Subsystem for Linux" and then use "WSL2".
+    - After doing this my Docker engine was successfully running.
+- Next I put together a `Dockerfile` following the Docker docs for Go, I opted for a multi-stage build as this would result in a smaller image.
+- Next I added `docker-compose.yml`. This isn't necessary for a single container application but is cleaner and allowed me to call my `.env`.
+    - Calling environment variables from a git ignored file and not setting them in a docker configurations prevents exposing them in the repo if it were to be publicly visible.
 
-The `/status` endpoint returns different content and `http` response code depending on the value of an environment variable called `APP_STATUS`. When `APP_STATUS=OK` the `/status` endpoint will return a `200` code and message, otherwise it will return a `500` code.
-
-You can run the application directly using `go run ./app/main.go` from the root of this repository.
-
-## The challenge
-
-We would like you to create a fork of this repository which expands on the existing code. Aim to provide a working docker image based on the included application where both endpoints of the API return a 200 http status code.
-
-Please include an updated README.md with steps to run your solution along with notes to document your approach and process.
-
-Complete the task at your own pace, we recommend around an hour and a half of focus, this can be spread out and is not a strict factor.
-
-**Do not worry if you are not able to fully complete the task, we are more interested in your approach then a perfect solution.**
-
-To help guide you in this task, we've outlined some typical steps (in no particular order) that would be needed.
-
-- Creating a Dockerfile
-- Building the Go app
-- Mapping ports
-- Setting up Docker on your local machine
-- Passing environment variables
-
-## The interview
-
-The challenge and your solution will form part of your face to face interview. We will ask you to explain your approach and, where relevant, ask questions on your solution.
-
-The solution, your notes and interactions in the interview will go towards following criteria:
-
-- Breaking down problems into logical steps
-- Explaining your thoughts and communicating them
-- Iterating towards a solution
-- Verifying your work
+## Running my dockerised application
+- After cloning the repo, copy `.env.example` and rename the copy `.env`.
+- In `.env` set `APP_STATUS` to `OK`.
+- Boot up Docker and ensure the engine is running.
+- In the root of the project folder run `docker-compose-up` in a command window.
+- The container will be now available at `http://localhost:8080/`.
+- Back in the command window `ctrl+c` to stop the container.
