@@ -19,8 +19,4 @@ WORKDIR /
 
 COPY --from=build /docker-app-status-api /docker-app-status-api
 
-EXPOSE 8080
-
-USER nonroot:nonroot
-
 ENTRYPOINT ["/docker-app-status-api"]
