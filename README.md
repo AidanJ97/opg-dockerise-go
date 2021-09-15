@@ -25,6 +25,6 @@
 - After cloning the repo, copy `.env.example` and rename the copy `.env`.
 - In `.env` set `APP_STATUS` to `OK`.
 - Boot up Docker and ensure the engine is running.
-- In the root of the project folder run `docker-compose-up` in a command window.
+- In the root of the project folder run `docker-compose up` in a command window.
 - The container will be now available at `http://localhost:8080/`.
 - Back in the command window `ctrl+c` to stop the container.
